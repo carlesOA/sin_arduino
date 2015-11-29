@@ -1,16 +1,25 @@
 
 #include <math.h>
+#include <ros.h>
+#include <std_msgs/Empty.h>
+#include <std_msgs/Float32.h>
+#include <std_msgs/Bool.h>
 
 const float myPI = 3.141593;
 float alpha = 0;
 float sin_value;
 int led =13;
 
+ros::NodeHandle nh;
+std_msgs::Float32 ros_float_msg;
+ros::Publisher ros_pub("ros_pub", &ros_float_msg);
 
 void setup()
 {
+  nh.initNode();
+  nh.advertise(ros_pub);
 pinMode(led , OUTPUT);
-Serial.begin(9600);
+
 }
 
 void loop()
@@ -25,27 +34,16 @@ else
   digitalWrite(led, HIGH);
   
   
-sin_value = sin(alpha);
+//sin_value = sin(alpha);
 
-//ros_float_msg.data = sin(alpha);
+ros_float_msg.data = sin(alpha);
 
-//ros_pub.publish(&ros_float_msg);
+ros_pub.publish(&ros_float_msg);
 
-//nh.spinOnce();
+nh.spinOnce();
 
-Serial.println(sin_value, DEC);
+//Serial.println(sin_value, DEC);
 
 delay(100);
 
 }
-
-
-
-
-
-
-
-
-
-
-
